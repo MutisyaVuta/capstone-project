@@ -30,4 +30,9 @@ def create_app():#Sets up and configures the Flask app.
     app.register_blueprint(book_blueprint)
     #... more blueprints here.
      
+    #import blue prints 
+    from .auth import auth_blueprint
+
+    #register blue prints 
+    app.register_blueprint(auth_blueprint)
     return app
