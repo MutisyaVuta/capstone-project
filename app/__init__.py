@@ -35,6 +35,14 @@ def create_app():
     CORS(app)  # Enables cross-origin requests from any domain.
 
     # import blue prints
+    from .endpoints import book_blueprint
+
+    # register blue prints
+    app.register_blueprint(book_blueprint)
+    # ... more blueprints here.
+
+    # import blue prints
+    # import blue prints
     from .auth import auth_blueprint
 
     # register blue prints
