@@ -25,6 +25,13 @@ def create_app():
     migrate.init_app(app, db)
     from .models import User, Book, Loan
 
+<<<<<<< HEAD
+    #import blue prints 
+    from .library_utils import library_blueprint
+    #register blue prints 
+    app.register_blueprint(library_blueprint)
+    return app
+=======
     CORS(app)
     from .routes import loan
 
@@ -48,3 +55,4 @@ def create_app():
     # register blue prints
     app.register_blueprint(auth_blueprint)
     return app
+>>>>>>> main
