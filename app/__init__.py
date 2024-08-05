@@ -25,5 +25,8 @@ def create_app():#Sets up and configures the Flask app.
     CORS(app) #Enables cross-origin requests from any domain.
 
     #import blue prints 
+    from .auth import auth_blueprint
+
     #register blue prints 
+    app.register_blueprint(auth_blueprint)
     return app
