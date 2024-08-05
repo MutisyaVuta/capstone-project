@@ -50,6 +50,25 @@ def get_loan():
     return jsonify(list_loan)
 
 
+@loan.route("/loan/<int:loan_id>/", methods=["GET"])
+def get_loan_by_id(loan_id):
+    loan = Loan.query.get_or_404(loan_id)
+    return jsonify(
+        {
+            "id": loan.id,
+            "book_id": loan.book_id,
+            "user_id": loan.user_id,
+            "checkout_date": (
+                loan.checkout_date.isoformat() if loan.checkout_date else None
+            ),
+            "due_date": loan.due_date.isoformat() if loan.due_date else None,
+            "return_date": loan.return_date.isoformat() if loan.return_date else None,
+            "fines": float(loan.fines),
+        }
+    )
+
+
+
 @loan.route("/loans/<int:loan_id>/return", methods=["POST"])
 def return_loan(loan_id):
     loan = Loan.query.get_or_404(loan_id)
