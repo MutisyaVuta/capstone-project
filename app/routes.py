@@ -30,7 +30,7 @@ def create_loan():
 
 @loan.route("/loans", methods=["GET"])
 def get_loan():
-    loans = Loan.query.all()  # Get all loan records
+    loans = Loan.query.all()
     list_loan = []
 
     for loan in loans:
@@ -43,7 +43,7 @@ def get_loan():
             ),
             "due_date": loan.due_date.isoformat() if loan.due_date else None,
             "return_date": loan.return_date.isoformat() if loan.return_date else None,
-            "fines": float(loan.fines),  # Ensure fines is a float
+            "fines": float(loan.fines),
         }
         list_loan.append(loan_data)
 
