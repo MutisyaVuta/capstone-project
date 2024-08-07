@@ -25,13 +25,10 @@ def create_app():
     migrate.init_app(app, db)
     from .models import User, Book, Loan
 
-<<<<<<< HEAD
     #import blue prints 
     from .library_utils import library_blueprint
     #register blue prints 
     app.register_blueprint(library_blueprint)
-    return app
-=======
     CORS(app)
     from .routes import loan
 
@@ -39,20 +36,14 @@ def create_app():
     migrate.init_app(app, db)
     from .models import User, Book, Loan
 
-    CORS(app)  # Enables cross-origin requests from any domain.
-
+    CORS(app)  
     # import blue prints
     from .endpoints import book_blueprint
 
+
     # register blue prints
     app.register_blueprint(book_blueprint)
-    # ... more blueprints here.
-
-    # import blue prints
-    # import blue prints
     from .auth import auth_blueprint
 
-    # register blue prints
     app.register_blueprint(auth_blueprint)
     return app
->>>>>>> main
