@@ -7,40 +7,35 @@ library_blueprint = Blueprint('library', __name__)
 ##
 
 @library_blueprint.route("/delete_book/<int:book_id>", methods=["DELETE"])
-@jwt_required()
-def delete_book():
-    book_id = request.get_json().get('book_id')
-    if not book_id:
-        return jsonify({'message': "Book ID is required"}), 400
+#@jwt_required()
+def delete_book(book_id):
     book = Book.query.get(book_id)
     if not book:
         return jsonify({'message': "Book not found"}), 404 
+    
     try:
         db.session.delete(book)
         db.session.commit()
+        return jsonify({'message': "Book deleted successfully"}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': "Failed to delete book", 'error': str(e)}), 500
-
-    return jsonify({'message': "Book deleted successfully"}), 200
-
+    
 @library_blueprint.route("/delete_loan/<int:loan_id>", methods=["DELETE"])
-@jwt_required()
-def delete_loan():
-    loan_id = request.get_json().get('loan_id')
-    if not loan_id:
-        return jsonify({'message': "Loan ID is required"}), 400
+#@jwt_required()
+def delete_loan(loan_id):
     loan = Loan.query.get(loan_id)
     if not loan:
         return jsonify({'message': "Loan not found"}), 404
     try:
         db.session.delete(loan)
         db.session.commit()
+        return jsonify({'message': "Loan deleted successfully"}), 200
+
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': "Failed to delete loan", 'error': str(e)}), 500
 
-    return jsonify({'message': "Loan deleted successfully"}), 200
 
 @library_blueprint.route("/search_book", methods=["POST"])
 def search_book():

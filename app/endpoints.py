@@ -1,3 +1,7 @@
+
+
+from flask_jwt_extended import jwt_required
+
 from flask import Blueprint, request, jsonify, json
 from . import db
 from .models import Book
@@ -6,6 +10,7 @@ book_blueprint = Blueprint('book_blueprint', __name__)
 
 # Add a book
 @book_blueprint.route('/book', methods=['POST'])
+@jwt_required()
 def add_book():
     data = request.get_json()
     new_book = Book(
@@ -20,6 +25,7 @@ def add_book():
 
 # Get book details
 @book_blueprint.route('/book/<int:book_id>', methods=['GET'])
+@jwt_required()
 def get_book(book_id):
     book = Book.query.get(book_id)
     if book is None:
@@ -34,6 +40,7 @@ def get_book(book_id):
 
 # Update a book
 @book_blueprint.route('/book/<int:book_id>', methods=['PUT'])
+@jwt_required()
 def update_book(book_id):
     book = Book.query.get(book_id)
     if book is None:

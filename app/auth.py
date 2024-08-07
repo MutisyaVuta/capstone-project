@@ -93,3 +93,19 @@ def logout():
     response = jsonify({"msg": "User logged out successfully"})
     unset_jwt_cookies(response)
     return response, 200
+
+@auth_blueprint.route("/search-users", methods=["POST"])
+@jwt_required()
+def search_users():
+    data = request.get_json()
+    admn_no = data.get('admn_no')
+
+    if not admn_no:
+        return jsonify({'message': "Admission number is required"}), 400
+
+    users = User.query.filter(User.admn_no.like(f"%{admn_no}%")).all()
+
+    if not users:
+        return jsonify({'message': "No users found"}), 404
+
+    return jsonify({'users': [{'id': user.id, 'name': user.name, 'email': user.email, 'admn_no': user.admn_no} for user in users]}), 200
