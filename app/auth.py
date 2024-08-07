@@ -80,7 +80,7 @@ def login():
     return jsonify({'user':user.details(),'token':access_token})
 
 @auth_blueprint.route('/users', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_all_users():
     users = User.query.all()
     user_data = [user.details() for user in users]
@@ -95,7 +95,7 @@ def logout():
     return response, 200
 
 @auth_blueprint.route("/search-users", methods=["POST"])
-@jwt_required()
+#@jwt_required()
 def search_users():
     data = request.get_json()
     admn_no = data.get('admn_no')

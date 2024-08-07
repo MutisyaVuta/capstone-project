@@ -10,7 +10,7 @@ book_blueprint = Blueprint('book_blueprint', __name__)
 
 # Add a book
 @book_blueprint.route('/book', methods=['POST'])
-@jwt_required()
+#@jwt_required()
 def add_book():
     data = request.get_json()
     new_book = Book(
@@ -23,24 +23,24 @@ def add_book():
     db.session.commit()
     return jsonify({'message': 'Book added successfully!'}), 201
 
-# Get book details
-@book_blueprint.route('/book/<int:book_id>', methods=['GET'])
-@jwt_required()
-def get_book(book_id):
-    book = Book.query.get(book_id)
-    if book is None:
-        return jsonify({'message': 'Book not found!'}), 404
-    return jsonify({
-        'id': book.id,
-        'title': book.title,
-        'author': book.author,
-        'copy_numbers': book.copy_numbers,
-        'book_location': book.book_location
-    })
-
+# Get all book details
+@book_blueprint.route('/books', methods=['GET'])
+#@jwt_required()
+def get_all_books():
+    books = Book.query.all()
+    book_data = []
+    for book in books:
+        book_data.append({
+            'id': book.id,
+            'title': book.title,
+            'author': book.author,
+            'copy_numbers': book.copy_numbers,
+            'book_location': book.book_location
+        })
+    return jsonify({'books': book_data})
 # Update a book
 @book_blueprint.route('/book/<int:book_id>', methods=['PUT'])
-@jwt_required()
+#@jwt_required()
 def update_book(book_id):
     book = Book.query.get(book_id)
     if book is None:
