@@ -16,7 +16,6 @@ conf = {
     "port": "5432",
 }
 
-
 class Config:
     SQLALCHEMY_DATABASE_URI = f"postgresql://{conf['user']}:{conf['password']}@{conf['host']}:{conf['port']}/{conf['dbname']}"
     JWT_SECRET_KEY = os.getenv("jwt_secret_key")
