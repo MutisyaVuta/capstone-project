@@ -41,7 +41,7 @@ class Book(db.Model):
     author = db.Column(db.String(80), nullable=False)
     copy_numbers = db.Column(db.Integer, nullable=False)
     book_location = db.Column(db.String(120), nullable=False)
-    loans = db.relationship("Loan", backref="book",lazy=True)
+    loans = db.relationship("Loan", backref="book",lazy=True ,cascade='all, delete')
 
     def __repr__(self):
         return f"Book('{self.title}', '{self.author}')"
