@@ -1,10 +1,6 @@
-from flask import Blueprint, request, jsonify, json, send_from_directory
+from flask import Blueprint, request, jsonify, json
 from . import db
 from .models import Book
-import os
-from flask import url_for
-from .config import *
-from werkzeug.utils import secure_filename
 
 book_blueprint = Blueprint('book_blueprint', __name__)
 
@@ -23,23 +19,14 @@ def add_book():
     db.session.commit()
     return jsonify({'message': 'Book added successfully!'}), 201
 
-
-# Get all book details
 @book_blueprint.route('/books', methods=['GET'])
 def get_all_books():
     books = Book.query.all()
-    book_data = []
-    for book in books:
-        book_data.append({
-            'id': book.id,
-            'title': book.title,
-            'author': book.author,
-            'copy_numbers': book.copy_numbers,
-            'book_location': book.book_location,
-            'image_url': book.image_url
-        })
-    return jsonify({'books': book_data})
-
+    if not books:
+        return jsonify({'message': 'No books found!'}), 404
+    return jsonify({'books': [{'id': book.id, 'title': book.title, 
+                               'author': book.author, 'copy_numbers': book.copy_numbers, 
+                               'book_location': book.book_location} for book in books]})
 # Update a book
 @book_blueprint.route('/book/<int:book_id>', methods=['PUT'])
 def update_book(book_id):
