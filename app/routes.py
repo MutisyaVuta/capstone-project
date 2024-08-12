@@ -2,11 +2,12 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from .models import db, Loan
 from datetime import datetime, timedelta
-from . import db 
+from . import db
 
 loan = Blueprint("loan", __name__)
 
-#create a loan 
+
+# create a loan
 @loan.route("/loans", methods=["POST"])
 def create_loan():
     data = request.get_json()
@@ -26,9 +27,13 @@ def create_loan():
     db.session.add(new_loan)
     db.session.commit()
 
-    return jsonify({"message": "Loan created successfully"}), 201
+    return (
+        jsonify({"message": "Loan created successfully", "loan_id": new_loan.id}),
+        201,
+    )
 
-#get all loans
+
+# get all loans
 @loan.route("/loans", methods=["GET"])
 def get_loan():
     loans = Loan.query.all()
@@ -50,7 +55,8 @@ def get_loan():
 
     return jsonify(list_loan)
 
-#retrieve specific loan by id 
+
+# retrieve specific loan by id
 @loan.route("/loan/<int:loan_id>/", methods=["GET"])
 def get_loan_by_id(loan_id):
     loan = Loan.query.get_or_404(loan_id)
@@ -69,11 +75,12 @@ def get_loan_by_id(loan_id):
     )
 
 
-#mark specific loan as returned
+# mark specific loan as returned
 @loan.route("/loans/<int:loan_id>/return", methods=["POST"])
 def return_loan(loan_id):
     loan = Loan.query.get_or_404(loan_id)
     loan.return_date = datetime.utcnow()
     loan.update_fines()
 
+    db.session.commit()
     return jsonify({"message": "Book returned successfully", "fines": loan.fines}), 200
