@@ -40,3 +40,12 @@ def update_book(book_id):
     book.book_location = data.get('book_location', book.book_location)
     db.session.commit()
     return jsonify({'message': 'Book updated successfully!'})
+#getting a specific book 
+@book_blueprint.route('/books/<int:book_id>', methods=['GET'])
+def get_book(book_id):
+    book = Book.query.get(book_id)
+    if book is None:
+        return jsonify({'message': 'Book not found!'}), 404
+    return jsonify({'book': {'id': book.id, 'title': book.title, 
+                             'author': book.author, 'copy_numbers': book.copy_numbers, 
+                             'book_location': book.book_location}})
