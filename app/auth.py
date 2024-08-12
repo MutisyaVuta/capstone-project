@@ -15,41 +15,45 @@ import json
 
 auth_blueprint=Blueprint('auth',__name__)#name of blue print
 #signing up route
-@auth_blueprint.route("/signup",methods=["POST"])
+@auth_blueprint.route("/signup", methods=["POST"])
 def signup():
-    body=request.get_json()
-    name=body.get('name')
-    email=body.get('email')
-    admn_no=body.get('admn_no')  
-    password=body.get('password')
+    body = request.get_json()
+    name = body.get('name')
+    email = body.get('email')
+    admn_no = body.get('admn_no')  
+    password = body.get('password')
 
     ## Validation
     if not email or not password or not name:
-        return jsonify({'message':"Required field missing"}),400
+        return jsonify({'message': "Required field missing"}), 400
     
-    if len(email)<4:
-        return jsonify({'message':"Email too short"}),400
+    if len(email) < 4:
+        return jsonify({'message': "Email too short"}), 400
     
-    if len(name)<4:
-        return jsonify({'message':"Name too short"}),400
+    if len(name) < 4:
+        return jsonify({'message': "Name too short"}), 400
     
-    if len(password)<4:
-        return jsonify({'message':"Password too short"}),400
+    if len(password) < 4:
+        return jsonify({'message': "Password too short"}), 400
     
-    if len(admn_no)<4:
-        return jsonify({'message':"admission too short"}),400
+    if len(admn_no) < 4:
+        return jsonify({'message': "Admission number too short"}), 400
     
-    existing_member=User.query.filter_by(email=email).first()
+    existing_member = User.query.filter_by(email=email).first()
+    existing_admn_no = User.query.filter_by(admn_no=admn_no).first()
 
     if existing_member:
-        return jsonify({'message':f"Email already in use {email}"}),400
+        return jsonify({'message': f"Email already in use {email}"}), 400
+    
+    if existing_admn_no:
+        return jsonify({'message': f"Admission number already in use {admn_no}"}), 400
     
     hashed_password = bcrypt.generate_password_hash(password).decode('utf8')
     
-    member=User(name=name,email=email,password=hashed_password,admn_no=admn_no )
+    member = User(name=name, email=email, password=hashed_password, admn_no=admn_no)
     db.session.add(member)
     db.session.commit()
-    return jsonify({"message":"Sign up success"}),201
+    return jsonify({"message": "Sign up success"}), 201
 
 @auth_blueprint.route("/login",methods=["POST"])
 def login():
