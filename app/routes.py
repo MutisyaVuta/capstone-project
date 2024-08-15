@@ -68,15 +68,19 @@ def get_loan_by_id(loan_id):
         }
     )
 
-
-#mark specific loan as returned
+#return and calculate fines
 @loan.route("/loans/<int:loan_id>/return", methods=["POST"])
 def return_loan(loan_id):
     loan = Loan.query.get_or_404(loan_id)
+
     loan.return_date = datetime.utcnow()
+    
+    # Update the fines based on the return date
     loan.update_fines()
 
-    return jsonify({"message": "Book returned successfully", "fines": loan.fines}), 200
+    fines_amount = loan.fines if loan.fines is not None else 0.00
+    return jsonify({"message": "Book returned successfully", "fines": fines_amount}), 200
+
 
 #checks if the a loan exists for that specific book
 @loan.route("/loans/book/<int:book_id>", methods=["GET"])
