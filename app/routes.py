@@ -84,3 +84,12 @@ def return_loan(loan_id):
 
     db.session.commit()
     return jsonify({"message": "Book returned successfully", "fines": loan.fines}), 200
+
+#checks if the a loan exists for that specific book
+@loan.route("/loans/book/<int:book_id>", methods=["GET"])
+def get_loan_id_for_book(book_id):
+    loan = Loan.query.filter_by(book_id=book_id).first()
+    if loan:
+        return jsonify({"loan_id": loan.id})
+    else:
+        return jsonify({"error": "Loan not found"}), 404
