@@ -13,7 +13,7 @@ conf = {
     "user": os.getenv("db_user"),
     "password": os.getenv("db_password"),
     "host": os.getenv("db_host"),
-    "port": "5432",
+    "port": "5432"    #5432.....6543
 }
 
 class Config:
