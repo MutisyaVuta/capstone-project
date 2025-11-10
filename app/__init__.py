@@ -42,7 +42,7 @@ def create_app():
     from .endpoints import book_blueprint
 
 
-    # register blue prints
+    # register blue prints ....an extra line for change
     app.register_blueprint(book_blueprint)
     from .auth import auth_blueprint
 
